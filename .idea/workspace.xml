@@ -2,20 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d7ac9edf-78c1-4b5b-909f-40529060fc38" name="默认的" comment="">
-      <change afterPath="$PROJECT_DIR$/src/utils/formRules.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/no-permission/404.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/no-permission/images/404.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/no-permission/images/login-bg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/no-permission/images/login-form-bg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/no-permission/no-permission-style.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/HelloWorld.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/layout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/About.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Home.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shims-vue.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/shims-vue.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue.config.ts" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +43,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="ts.external.directory.path" value="E:\奇云软件\Zp-Admin\zp-admin-webpack\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -83,6 +77,8 @@
       <workItem from="1607254490531" duration="9343000" />
       <workItem from="1607301932457" duration="69000" />
       <workItem from="1607337204004" duration="9953000" />
+      <workItem from="1607388357068" duration="139000" />
+      <workItem from="1607388496784" duration="466000" />
     </task>
     <servers />
   </component>

@@ -1,14 +1,16 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw, RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 // 基础模板
-const Layout = () => import('../layout/layout')
+const Layout = () => import( /* webpackChunkName: "Layout" */'../layout/layout')
 // 登录
-const Login = () => import('../views/no-permission/login')
+const Login = () => import(/* webpackChunkName: "Login" */'../views/no-permission/login')
 // 看板
-const DashBoard = () => import('../views/permission/board/dash-board')
+const DashBoard = () => import(/* webpackChunkName: "DashBoard" */'../views/permission/board/dash-board')
 // 用户列表
-const UserList = () => import('../views/permission/user/user-list')
+const UserList = () => import(/* webpackChunkName: "UserList" */'../views/permission/user/user-list')
 // 404
-const NoPage = () => import('../views/no-permission/404')
+const NoPage = () => import(/* webpackChunkName: "NoPage" */'../views/no-permission/404')
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
@@ -25,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
       auth: false
     },
     component: Layout,
-    children:[
+    children: [
       {
         path: '/404',
         name: 'NoPage',
@@ -46,7 +48,7 @@ export const authRoutes: Array<RouteRecordRaw> = [
       key: 'board',
       title: '看板',
       auth: true,
-      permissions: ['a','b']
+      permissions: ['a', 'b']
     },
     component: Layout,
     children: [
@@ -57,7 +59,7 @@ export const authRoutes: Array<RouteRecordRaw> = [
           key: 'dash-board',
           auth: true,
           title: '数据概览',
-          permissions: ['a','b']
+          permissions: ['a', 'b']
         },
         component: DashBoard
       },
@@ -68,7 +70,7 @@ export const authRoutes: Array<RouteRecordRaw> = [
           key: 'data-list',
           auth: true,
           title: '数据统计列表',
-          permissions: ['a','b']
+          permissions: ['a', 'b']
         },
         component: DashBoard,
       }
@@ -81,7 +83,7 @@ export const authRoutes: Array<RouteRecordRaw> = [
       key: 'user',
       auth: true,
       title: '用户管理',
-      permissions: ['b']
+      permissions: ['a', 'b']
     },
     component: Layout,
     children: [
@@ -103,7 +105,7 @@ export const authRoutes: Array<RouteRecordRaw> = [
 const hasAuth = (r: RouteRecordRaw, auth: string) => {
   return r.meta?.permissions.some((p: string) => p === auth)
 }
-const permissionRoutes = (routes: RouteRecordRaw[], auth: string)=> {
+const permissionRoutes = (routes: RouteRecordRaw[], auth: string) => {
   let newRoutes: RouteRecordRaw[];
   newRoutes = routes.reduce((newRoutes: RouteRecordRaw[], route: RouteRecordRaw): RouteRecordRaw[] => {
     let r = route;
@@ -132,55 +134,58 @@ const permissionRoutes = (routes: RouteRecordRaw[], auth: string)=> {
   }, []);
   return newRoutes
 }
-export let userRoutes:RouteRecordRaw[] = [];
+export let userRoutes: RouteRecordRaw[] = [];
 const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
 // router.addRoute(authRoutes[0])
 // router.addRoute(authRoutes[1])
-router.beforeEach((to:RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
   // console.log(to, from)
   // 如果非授权列表中没有要进入的路由
-  if(routes.filter(r => r.path === to.path).length === 0){
+  NProgress.start();
+  if (routes.filter(r => r.path === to.path).length === 0) {
+    // 如果进入的路由不在非权限路由内
     const token = localStorage.getItem('token');
-    if(token === '' || token === undefined){
+    if (!token) {
+      console.log('没有token，去登录')
       next('/login')
-    }else{
-      //  当前路由
-        const currentRouteList = router.getRoutes();
-        console.log(currentRouteList)
-        if(currentRouteList.length === 3){
-          userRoutes = permissionRoutes(authRoutes, 'a');
-        }
-        if(currentRouteList.filter(r => r.path === to.path).length === 0){
-          // 当前添加的路由列表没有该路由
-          // 找到进入路由所在父路由
-          const route = userRoutes.filter(r => {
-            return JSON.stringify(r).includes(to.path)
-          })
-          if(route.length !== 0){
-            router.addRoute(route[0])
-            next(to.path)
-          }else{
-            console.log('没有权限')
-            next('/404')
-          }
-        }else{
-          // console.log('路由中有该路由，直接进入')
-          next()
-        }
-      // }
-
-
-      // router.addRoute(authRoutes[0])
-      // console.log('添加路由')
-      // console.log(router.getRoutes())
-      // next()
     }
-  }else{
+    //  当前路由
+    const currentRouteList = router.getRoutes();
+    // console.log(currentRouteList)
+    if (currentRouteList.length === 3) {
+      userRoutes = permissionRoutes(authRoutes, 'a');
+    }
+    if (currentRouteList.filter(r => r.path === to.path).length === 0) {
+      // 当前添加的路由列表没有该路由
+      // 找到进入路由所在父路由
+      const route = userRoutes.filter(r => {
+        return JSON.stringify(r).includes(to.path)
+      })
+      if (route.length !== 0) {
+        router.addRoute(route[0])
+        next(to.path)
+      } else {
+        console.log('没有权限')
+        next('/404')
+      }
+    } else {
+      // console.log('路由中有该路由，直接进入')
+      next()
+    }
+    // }
+    // router.addRoute(authRoutes[0])
+    // console.log('添加路由')
+    // console.log(router.getRoutes())
+    // next()
+  } else {
     next()
   }
 
+})
+router.afterEach((to)=>{
+  NProgress.done();
 })
 export default router

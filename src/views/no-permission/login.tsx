@@ -4,6 +4,8 @@ import './no-permission-style.less'
 import { useForm } from '@ant-design-vue/use'
 import formRules from '../../utils/formRules'
 import { UserOutlined, EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons-vue'
+import { useStore } from 'vuex'
+import { LOGIN } from '../../store/modules/public'
 export default defineComponent({
   setup () {
     // 登录表单
@@ -21,15 +23,30 @@ export default defineComponent({
     const { resetFields, validate, validateInfos } = useForm(loginInfo, loginRules);
     // 路由实例
     const router = useRouter();
+    // vuex
+    const store = useStore();
+    const { dispatch, state } = store;
+    const { Public } = state;
     // 提交表单
     const onSubmit = () => {
-      validate().then(value => {
-        localStorage.setItem('token', '0000-0000-0000-0000');
-        router.push('/board/dashboard')
+      validate().then(async value => {
+        await dispatch(LOGIN,{
+          username: value.loginName,
+          password: value.loginPassword
+        })
+        if(Public.isLoginSuccess){
+          localStorage.setItem('token', Public.userInfo.jwtToken);
+          localStorage.setItem('userinfo', JSON.stringify(Public.userInfo));
+          router.push('/board/dashboard')
+        }
+        // console.log(Public.isLoginSuccess)
+        // router.push('/board/dashboard')
       }).catch(e => {
         console.log(e)
       })
     }
+    
+    
     return () => <div class="login-container">
       <div class="login-form-box">
         <h1>ZP-Admin</h1>

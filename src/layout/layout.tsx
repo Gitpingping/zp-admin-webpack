@@ -18,13 +18,13 @@ const styles = {
   aLayout: {
     marginLeft: '200px',
     background: '#fff',
-    transition: 'margin-left .2s ease-out',
+    transition: 'margin-left .15s ease-out',
     // transitionTimingFunction: ''
   },
   aLayout2: {
     marginLeft: '80px',
     background: '#fff',
-    transition: 'margin-left .2s ease-out',
+    transition: 'margin-left .15s ease-out',
 
   },
   aLayoutHeader: {
@@ -132,6 +132,11 @@ export default defineComponent({
       collapsed.value = !collapsed.value;
       // collapsed = ref(!collapsed.value)
     }
+    // 退出
+    const exit = () => {
+      localStorage.clear();
+      router.replace('/login')
+    }
     return () => <>
     <a-layout id="components-layout-demo-fixed-sider">
       <a-layout-sider style={styles.aLayoutSider} collapsed={collapsed}>
@@ -171,7 +176,7 @@ export default defineComponent({
                 >
               </a-menu-item>
               <a-menu-divider />
-              <a-menu-item key="2">
+              <a-menu-item key="2" onClick={exit}>
                 退出登录
               </a-menu-item>
             </a-menu>}>
