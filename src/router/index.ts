@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Login
   },
   {
-    path: '/',
+    path: '/error-page',
     name: 'ErrorPage',
     meta: {
       auth: false
@@ -29,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Layout,
     children: [
       {
-        path: '/404',
+        path: '/error-page/404',
         name: 'NoPage',
         meta: {
           auth: false
@@ -142,50 +142,52 @@ const router = createRouter({
 // router.addRoute(authRoutes[0])
 // router.addRoute(authRoutes[1])
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-  // console.log(to, from)
+  console.log(to, routes)
   // 如果非授权列表中没有要进入的路由
   NProgress.start();
-  if (routes.filter(r => r.path === to.path).length === 0) {
+  const token = localStorage.getItem('token');
+  if(to.path == '/' && token){
+    next('/board/dashboard')
+  }
+  if (routes.filter(r => r.path === to.path).length !== 0) {
+    next()
+  } else {
     // 如果进入的路由不在非权限路由内
-    const token = localStorage.getItem('token');
+    // console.log('如果进入的路由不在非权限路由内')
+    console.log(token);
     if (!token) {
       console.log('没有token，去登录')
       next('/login')
-    }
-    //  当前路由
-    const currentRouteList = router.getRoutes();
-    // console.log(currentRouteList)
-    if (currentRouteList.length === 3) {
-      userRoutes = permissionRoutes(authRoutes, 'a');
-    }
-    if (currentRouteList.filter(r => r.path === to.path).length === 0) {
-      // 当前添加的路由列表没有该路由
-      // 找到进入路由所在父路由
-      const route = userRoutes.filter(r => {
-        return JSON.stringify(r).includes(to.path)
-      })
-      if (route.length !== 0) {
-        router.addRoute(route[0])
-        next(to.path)
-      } else {
-        console.log('没有权限')
-        next('/404')
-      }
     } else {
-      // console.log('路由中有该路由，直接进入')
-      next()
+      //  当前路由
+      const currentRouteList = router.getRoutes();
+      // console.log(currentRouteList)
+      if (currentRouteList.length === 3) {
+        userRoutes = permissionRoutes(authRoutes, 'a');
+      }
+      if (currentRouteList.filter(r => r.path === to.path).length === 0) {
+        // 当前添加的路由列表没有该路由
+        // 找到进入路由所在父路由
+        const route = userRoutes.filter(r => {
+          return JSON.stringify(r).includes(to.path)
+        })
+        if (route.length !== 0) {
+          router.addRoute(route[0])
+          next(to.path)
+        } else {
+          console.log('没有权限')
+          next('/404')
+        }
+      } else {
+        next()
+      }
     }
-    // }
-    // router.addRoute(authRoutes[0])
-    // console.log('添加路由')
-    // console.log(router.getRoutes())
-    // next()
-  } else {
-    next()
+
+
   }
 
 })
-router.afterEach((to)=>{
+router.afterEach((to) => {
   NProgress.done();
 })
 export default router

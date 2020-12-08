@@ -35,10 +35,10 @@ module.exports = {
         threshold: 0,
         minRatio: 0.8,
       }),
-      new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 5,
-        minChunkSize: 100
-      }),
+      // new webpack.optimize.LimitChunkCountPlugin({
+      //   maxChunks: 5,
+      //   minChunkSize: 100
+      // }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /zh-cn/)
       // new webpack.PrefetchPlugin([context], request)
       // new UglifyJsPlugin({
